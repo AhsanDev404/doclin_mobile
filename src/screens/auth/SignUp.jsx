@@ -1,62 +1,65 @@
 import React, { useState } from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
+import { useForm } from "react-hook-form";
+
+import { login } from "../../utils/assets";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { login } from "../utils/assets";
-import { useForm, Controller } from "react-hook-form";
-import { loginSchema } from "../utils/yupSchema";
-import { validateFormData } from "../utils/formValidation";
-export default function Login({ navigation }) {
+import { signupSchema } from "../../utils/yupSchema";
+import { validateFormData } from "../../utils/formValidation";
+
+
+
+export default function SignUp({ navigation }) {
   const { control, handleSubmit } = useForm();
   const [validationErrors, setValidationErrors] = useState({});
 
-   const handleValidation = async (data) => {
-    await validateFormData(data, loginSchema, setValidationErrors, onSubmit);
+  const handleValidation = async (data) => {
+    await validateFormData(data, signupSchema, setValidationErrors, onSubmit);
   };
 
   const onSubmit = (data) => {
     // Handle form submission
-    console.log(data); // Access form data here
+    console.log(data); // Access validated form data here
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={login} style={styles.image} />
-        <Text variant="displaySmall">Hello again</Text>
-        <Text style={styles.text}>Welcome back, you've been missed</Text>
-        <Controller
+        <Text variant="displaySmall">Create an Account</Text>
+        <TextInput
+          label="Full Name"
           control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Email"
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
-              style={styles.input}
-            />
-          )}
+          name="fullName"
+          style={styles.input}
+        />
+        {validationErrors.fullName && <Text>{validationErrors.fullName}</Text>}
+        <TextInput
+          label="Email"
+          control={control}
           name="email"
-          defaultValue=""
+          style={styles.input}
         />
         {validationErrors.email && <Text>{validationErrors.email}</Text>}
-        <Controller
+        <TextInput
+          label="Password"
           control={control}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Password"
-              onBlur={onBlur}
-              onChangeText={(value) => onChange(value)}
-              value={value}
-              secureTextEntry
-              right={<TextInput.Icon  icon="eye" />}
-              style={styles.input}
-            />
-          )}
           name="password"
-          defaultValue=""
+          secureTextEntry
+          right={<TextInput.Icon icon="eye" />}
+          style={styles.input}
         />
         {validationErrors.password && <Text>{validationErrors.password}</Text>}
+        <TextInput
+          label="Confirm Password"
+          control={control}
+          name="confirmPassword"
+          right={<TextInput.Icon icon="eye" />}
+          secureTextEntry
+          style={styles.input}
+        />
+        {validationErrors.confirmPassword && <Text>{validationErrors.confirmPassword}</Text>}
         <Button
           style={styles.button}
           contentStyle={styles.buttonContent}
@@ -66,17 +69,17 @@ export default function Login({ navigation }) {
           )}
           onPress={handleSubmit(handleValidation)}
         >
-          Sign In
+          Register Now
         </Button>
       </View>
-      <View style={styles.registerContainer}>
+      <View style={styles.loginContainer}>
         <Text>
-          Not a member?{" "}
+          Already have an account?{" "}
           <Text
             style={styles.navigationButton}
-            onPress={() => navigation.push("SignUp")}
+            onPress={() => navigation.navigate("Login")}
           >
-            Register Now
+            Login
           </Text>
         </Text>
       </View>
@@ -113,16 +116,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    color: "gray",
-    width: 150,
-    textAlign: "center",
-  },
-  registerContainer: {
-    flex: 1,
+  loginContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
   },
   navigationButton: {
     fontWeight: "bold",
+    marginLeft: 5,
   },
 });
