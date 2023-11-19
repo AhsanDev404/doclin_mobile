@@ -49,7 +49,7 @@ export default function Login({ navigation }) {
               onChangeText={(value) => onChange(value)}
               value={value}
               secureTextEntry
-              right={<TextInput.Icon icon="eye" />}
+              right={<TextInput.Icon  icon="eye" />}
               style={styles.input}
             />
           )}

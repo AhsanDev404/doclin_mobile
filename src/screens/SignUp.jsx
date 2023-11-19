@@ -47,6 +47,7 @@ export default function SignUp({ navigation }) {
           control={control}
           name="password"
           secureTextEntry
+          right={<TextInput.Icon icon="eye" />}
           style={styles.input}
         />
         {validationErrors.password && <Text>{validationErrors.password}</Text>}
@@ -54,6 +55,7 @@ export default function SignUp({ navigation }) {
           label="Confirm Password"
           control={control}
           name="confirmPassword"
+          right={<TextInput.Icon icon="eye" />}
           secureTextEntry
           style={styles.input}
         />
