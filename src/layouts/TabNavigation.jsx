@@ -28,7 +28,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Community"
+        name="MainCommunity"
         component={CommunityNavigation}
         options={{
           tabBarLabel: "Community",
@@ -38,7 +38,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="ChatBot"
+        name="MainChatBot"
         component={ChatBotNavigation}
         options={{
           tabBarLabel: "ChatBot",
@@ -48,7 +48,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="MedicalCard"
+        name="MainMedicalCard"
         component={MedicalCardNavigation}
         options={{
           tabBarLabel: "Medical Card",
@@ -58,7 +58,7 @@ export default function TabNavigation() {
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="MainProfile"
         component={ProfileNavigation}
         options={{
           tabBarLabel: "Profile",
