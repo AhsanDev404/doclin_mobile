@@ -1,10 +1,12 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-
-export default function CustomProvider({children}) {
+import { View, Text } from "react-native";
+import React from "react";
+import { PaperProvider } from "react-native-paper";
+export default function CustomProvider({ children }) {
   return (
     <>
-      <Text>CustomProvider</Text>
+      <PaperProvider>
+        {children}
+        </PaperProvider>
     </>
-  )
+  );
 }
