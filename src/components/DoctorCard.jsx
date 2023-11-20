@@ -2,10 +2,12 @@ import { View, Image } from "react-native";
 import React from "react";
 import { Button, Card, Text } from "react-native-paper";
 import { profile } from "../utils/assets";
+import { useNavigation } from "@react-navigation/native";
 
 export default function DoctorCard({item}) {
+  const navigation = useNavigation()
   return (
-    <Card style={{  marginTop:50 ,marginLeft:5, width:180 }}>
+    <Card onPress={()=>navigation.navigate("Details")} style={{  marginTop:50 ,marginLeft:5, width:180 }}>
       <Image
         style={{
           width: 100,
