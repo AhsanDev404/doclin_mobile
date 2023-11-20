@@ -5,7 +5,7 @@ import { profile } from "../utils/assets";
 
 export default function DoctorCard({item}) {
   return (
-    <Card style={{  marginTop:50 ,marginLeft:10, width:150 }}>
+    <Card style={{  marginTop:50 ,marginLeft:5, width:180 }}>
       <Image
         style={{
           width: 100,

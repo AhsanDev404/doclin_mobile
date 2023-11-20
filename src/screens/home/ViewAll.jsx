@@ -23,7 +23,7 @@ export default function ViewAll({navigation}) {
           />
         </View>
         <View>
-        <IconButton onPress={()=>navigation.push('Home')} style={{alignSelf:"center" , backgroundColor:'black' ,margin:10 }} iconColor="white" icon={'close'} />
+        <IconButton onPress={()=>navigation.push('Home')} style={{alignSelf:"center" , backgroundColor:'black' ,margin:20 }} iconColor="white" icon={'close'} />
         </View>
     </ScrollView>
   )

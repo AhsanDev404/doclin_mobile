@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
             contentContainerStyle={{ alignItems: "center" }} // Align items in the center
           />
         </View>
-        <Button onPress={()=>navigation.push('ViewAll')} mode="contained" style={{margin:10 , backgroundColor:"black"}}>Explore More</Button>
+        <Button onPress={()=>navigation.push('ViewAll')} mode="contained" style={{margin:20 , backgroundColor:"black"}}>Explore More</Button>
       </View>
     </ScrollView>
   );
