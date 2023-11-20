@@ -2,8 +2,10 @@ import { Image, View } from 'react-native'
 import React from 'react'
 import { Button, Text } from 'react-native-paper'
 import { hero } from '../utils/assets'
+import { useNavigation } from '@react-navigation/native'
 
-export default function HeroSection({navigation}) {
+export default function HeroSection() {
+  const navigation  = useNavigation()
   return (
     <View
         style={{
@@ -23,7 +25,7 @@ export default function HeroSection({navigation}) {
             Are you ready to have your first therapy session?
           </Text>
           <Button
-            onPress={() => navigation.push("StartA")}
+            onPress={() => navigation.navigate("StartA")}
             style={{ backgroundColor: "black" }}
             mode="contained"
           >

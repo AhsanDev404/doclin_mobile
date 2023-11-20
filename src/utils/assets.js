@@ -5,6 +5,7 @@ const sad = require('../assets/sad.png')
 const happy = require('../assets/happy.png')
 const excited = require('../assets/excited.png')
 const hero = require('../assets/hero.png')
+const anxity = require('../assets/anxity.png')
 
 
-export {login,profile,scared,sad,happy,excited,hero}
+export {login,profile,scared,sad,happy,excited,hero , anxity}

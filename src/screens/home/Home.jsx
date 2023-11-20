@@ -52,7 +52,7 @@ export default function Home({ navigation }) {
           </Text>
         </Text>
       </View>
-      <HeroSection navigation={navigation} />
+      <HeroSection  />
       <View style={{ margin: 10 }}>
         <Text style={{ fontWeight: "bold" }} variant="headlineSmall">
           Consultation
