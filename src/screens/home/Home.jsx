@@ -52,7 +52,7 @@ export default function Home({ navigation }) {
           </Text>
         </Text>
       </View>
-      <HeroSection />
+      <HeroSection navigation={navigation} />
       <View style={{ margin: 10 }}>
         <Text style={{ fontWeight: "bold" }} variant="headlineSmall">
           Consultation
@@ -72,7 +72,7 @@ export default function Home({ navigation }) {
             contentContainerStyle={{ alignItems: "center" }} // Align items in the center
           />
         </View>
-        <Button mode="contained" style={{margin:10 , backgroundColor:"black"}}>Explore More</Button>
+        <Button onPress={()=>navigation.push('ViewAll')} mode="contained" style={{margin:10 , backgroundColor:"black"}}>Explore More</Button>
       </View>
     </ScrollView>
   );

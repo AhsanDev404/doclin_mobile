@@ -7,6 +7,7 @@ import StartA from '../screens/home/StartA';
 import StartB from '../screens/home/StartB';
 import StartC from '../screens/home/StartC';
 import StartD from '../screens/home/StartD';
+import ViewAll from '../screens/home/ViewAll';
 const Stack = createNativeStackNavigator();
 export default function HomeNavigation() {
   return (
@@ -17,6 +18,7 @@ export default function HomeNavigation() {
      <Stack.Screen name="StartB" component={StartB} />
      <Stack.Screen name="StartC" component={StartC} />
      <Stack.Screen name="StartD" component={StartD} />
+     <Stack.Screen name="ViewAll" component={ViewAll} />
      </Stack.Navigator>
     </>
   )

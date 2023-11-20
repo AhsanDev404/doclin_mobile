@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, Text } from 'react-native-paper'
 import { hero } from '../utils/assets'
 
-export default function HeroSection() {
+export default function HeroSection({navigation}) {
   return (
     <View
         style={{
