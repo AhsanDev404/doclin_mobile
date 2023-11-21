@@ -85,6 +85,10 @@ export const community = [
     image: feelings,
     title: "Feeling Lost?",
   },
+  {
+    image: growing,
+    title: "Growing Up",
+  },
 ];
 
 export const article = [
