@@ -10,6 +10,7 @@ import {
   social,
   growing,
   anxity,
+  angry,
 } from "./assets";
 
 export const feeling = [
@@ -28,6 +29,10 @@ export const feeling = [
   {
     image: excited,
     title: "Excited",
+  },
+  {
+    image: angry,
+    title: "Angry",
   },
 ];
 export const doctorsData = [

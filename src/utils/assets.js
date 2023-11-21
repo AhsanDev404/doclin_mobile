@@ -11,8 +11,10 @@ const sleep = require("../assets/sleep.png");
 const career = require("../assets/career.png");
 const social = require("../assets/social.png");
 const growing = require("../assets/growing.png");
+const angry = require("../assets/angry.png");
 
 export {
+  angry,
   login,
   profile,
   scared,
