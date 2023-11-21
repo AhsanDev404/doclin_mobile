@@ -61,6 +61,12 @@ export const doctorsData = [
     specialization: "Dermatologist",
     image: profile, // Replace with a placeholder or default image
   },
+  {
+    id: 6,
+    name: "Dr. Sarah Williams",
+    specialization: "Dermatologist",
+    image: profile, // Replace with a placeholder or default image
+  },
   // Add more doctors as needed
 ];
 
