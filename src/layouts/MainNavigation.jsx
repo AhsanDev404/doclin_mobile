@@ -10,7 +10,7 @@ export default function MainNavigation() {
     <>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="Auth" component={AuthNavigation} /> */}
+          <Stack.Screen name="Auth" component={AuthNavigation} />
           <Stack.Screen name="Tab" component={TabNavigation} />
         </Stack.Navigator>
       </NavigationContainer>

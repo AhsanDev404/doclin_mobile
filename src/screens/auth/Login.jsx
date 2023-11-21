@@ -2,22 +2,44 @@ import React, { useState } from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { login } from "../../utils/assets";
+
 import { useForm, Controller } from "react-hook-form";
 import { loginSchema } from "../../utils/yupSchema";
 import { validateFormData } from "../../utils/formValidation";
+import { login } from "../../utils/assets";
+import axios from "axios";
+import { loginAPI } from "../../services/auth";
+
+
 export default function Login({ navigation }) {
   const { control, handleSubmit } = useForm();
   const [validationErrors, setValidationErrors] = useState({});
 
    const handleValidation = async (data) => {
-    await validateFormData(data, loginSchema, setValidationErrors, onSubmit);
+    try {
+      await validateFormData(data, loginSchema, setValidationErrors, onSubmit);
+      
+    } catch (error) {
+      
+    }
   };
 
-  const onSubmit = (data) => {
-    // Handle form submission
-    console.log(data); // Access form data here
+  const onSubmit = async (data) => {
+    try {
+      const responseData = await loginAPI(data); // Call the loginAPI function
+      console.log(responseData);
+      // Handle the response as needed (e.g., set state, redirect, etc.)
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle the error (e.g., show error message to the user)
+    }
   };
+
+
+  
+
+  
+  
 
   return (
     <ScrollView style={styles.container}>
