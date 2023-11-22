@@ -5,6 +5,7 @@ import { Button, Card, Text } from "react-native-paper";
 import { doctorsData, feeling } from "../../utils/constant";
 import HeroSection from "../../components/HeroSection";
 import DoctorCard from "../../components/DoctorCard";
+import ConsultantList from "../../components/ConsultantList";
 
 export default function Home({ navigation }) {
   const name = "Ahmed";
@@ -60,18 +61,7 @@ export default function Home({ navigation }) {
         <Text variant="bodyLarge" style={{ color: "#888" }}>
           Best Therapists available 24/7
         </Text>
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <FlatList
-            scrollEnabled={false}
-            data={doctorsData}
-            renderItem={({ item }) => <DoctorCard item={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            contentContainerStyle={{ alignItems: "center" }} // Align items in the center
-          />
-        </View>
+        <ConsultantList numberOfDoctorsToShow={4} />
         <Button onPress={()=>navigation.push('ViewAll')} mode="contained" style={{margin:20 , backgroundColor:"black"}}>Explore More</Button>
       </View>
     </ScrollView>

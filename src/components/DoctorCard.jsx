@@ -7,7 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 export default function DoctorCard({item}) {
   const navigation = useNavigation()
   return (
-    <Card onPress={()=>navigation.navigate("Details")} style={{  marginTop:50 ,marginLeft:5, width:180 }}>
+    <Card onPress={()=>{
+      navigation.navigate('MainMedicalCard', {
+        screen: 'Details',
+        params: { item: item }, 
+      });
+      
+
+    }} style={{  marginTop:50 ,marginLeft:5, width:180 }}>
       <Image
         style={{
           width: 100,
@@ -19,7 +26,7 @@ export default function DoctorCard({item}) {
           position: "relative",
           bottom: 30,
         }}
-        source={item.image}
+        source={profile}
       />
       <Text
         style={{ textAlign: "center", fontWeight: "bold" }}

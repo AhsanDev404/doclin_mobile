@@ -3,9 +3,15 @@ import React from "react";
 import { Button, Card, IconButton, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { profile } from "../../utils/assets";
+import { useRoute } from '@react-navigation/native';
 
 export default function Details() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  
+ 
+
   return (
     <ScrollView style={{ backgroundColor: "#fff" }}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -32,7 +38,7 @@ export default function Details() {
             source={profile}
           />
           <View>
-            <Text variant="titleLarge">Dr. Amanda H.</Text>
+            <Text numberOfLines={1} variant="titleLarge">{route.params.item.name}</Text>
             <Text style={{ color: "#888" }}>Ph.D. Clinical Psych.</Text>
           </View>
         </View>
@@ -73,7 +79,7 @@ export default function Details() {
           </Card>
         </View>
         <Button
-        onPress={()=>navigation.navigate('TimeSlots')}
+        onPress={()=>navigation.navigate('TimeSlots',{consultant:route.params.item._id})}
           mode="contained"
           style={{ backgroundColor: "black", margin: 10 }}
         >

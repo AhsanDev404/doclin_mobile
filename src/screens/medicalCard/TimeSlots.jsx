@@ -1,54 +1,89 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Button, Card, Title, Subheading } from 'react-native-paper';
+import { getTimeSlotsByConsultantId } from '../../services/timeSlots';
+import { useRoute } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createBooking } from '../../services/booking';
+import ErrorMessage from '../../components/ErrorMessage';
 
-const TimeSlots = ({navigation}) => {
+const TimeSlots = ({ navigation }) => {
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [slots, setSlots] = useState([]);
+  const route = useRoute();
+  const [error, setError] = useState(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const fetchTimeSlots = async () => {
+      try {
+        const responseData = await getTimeSlotsByConsultantId(route.params.consultant);
+        setSlots(responseData.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-  const handleSlotSelection = (slot) => {
-    setSelectedSlot(slot);
-    // Handle slot selection logic here
+    fetchTimeSlots();
+  }, [route.params.consultant]);
+
+  const handelConfirm = async () => {
+
+    if(!selectedSlot){
+      setError("Login failed. Please check your credentials.");
+      setVisible(true);
+    }
+    else{
+      const token = await AsyncStorage.getItem("token");
+    try {
+      const res = await createBooking(token , {timeSlot:selectedSlot})
+      if(res.data){
+        navigation.push('Confirm')
+      }
+    } catch (error) {
+      
+    }
+    }
+    
+    
   };
-
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const timeSlots = ['9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM'];
 
   return (
     <ScrollView style={{ paddingHorizontal: 20 }}>
       <Title style={{ textAlign: 'center', marginBottom: 20 }}>Select a Time Slot</Title>
-      {days.map((day, dayIndex) => (
-        <Card key={dayIndex} style={{ marginVertical: 10, padding: 15 ,  }}>
-          <Title>{day}</Title>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap:'wrap' }}>
-            {timeSlots.map((slot, slotIndex) => (
+      {slots.map((slotGroup) => (
+        <Card key={slotGroup._id} style={{ marginVertical: 10, padding: 15 }}>
+          <Title>{slotGroup.timeSlots[0].day}</Title>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+            {slotGroup.timeSlots[0].slots.map((slot) => (
               <Button
-                key={slotIndex}
+                key={slot._id}
                 mode="outlined"
-                onPress={() => handleSlotSelection(`${day} - ${slot}`)}
+                onPress={() => setSelectedSlot(slot._id)}
                 style={{
                   marginVertical: 5,
-                  backgroundColor: selectedSlot === `${day} - ${slot}` ? 'blue' : 'transparent',
+                  backgroundColor: selectedSlot === slot._id ? 'blue' : 'transparent',
                 }}
               >
-                <Subheading style={{ color: selectedSlot === `${day} - ${slot}` ? 'white' : 'black' }}>
-                  {slot}
+                <Subheading style={{ color: selectedSlot?._id === slot._id ? 'white' : 'black' }}>
+                  {`${slot.startTime} - ${slot.endTime}`}
                 </Subheading>
               </Button>
             ))}
           </View>
           <Button
-        mode="contained"
-        style={{ margin: 20 , backgroundColor:'black'  }}
-        onPress={() => navigation.push('Confirm')}
-        
-       
-        
-      >
-        Confirm
-      </Button>
+            mode="contained"
+            style={{ margin: 20, backgroundColor: 'black' }}
+            onPress={handelConfirm}
+          >
+            Confirm
+          </Button>
         </Card>
       ))}
-      
+      <ErrorMessage
+        visible={visible}
+        hideDialog={() => setVisible(false)}
+        message={error}
+      />
     </ScrollView>
   );
 };
