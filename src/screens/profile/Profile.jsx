@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { Text, Button } from 'react-native-paper';
 import { profile } from '../../utils/assets';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library
+import { logoutUser } from '../../services/auth';
+import { clearUser } from '../../redux/slices/authSlice';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from 'react-redux';
+import ErrorMessage from '../../components/ErrorMessage';
 
-export default function Profile({navigation}) {
+export default function Profile({}) {
+  const navigation  = useNavigation()
+  const dispatch = useDispatch()
+  const [error, setError] = useState(null);
+  const [visible, setVisible] = useState(false);
   const handlePersonal = () => {
-    navigation.push('Personal')
+    navigation.navigate('Personal')
   };
 
   const handleContact = () => {
-    navigation.push('Contact')
+    navigation.navigate('Contact')
   };
 
-  const handleLogout = () => {
-    // Handle logout button action
+  const handleLogout = async() => {
+    try {
+      const token = await AsyncStorage.getItem("token");
+      const responseData = await logoutUser(token); // Call the loginAPI function
+      dispatch(clearUser());
+      await AsyncStorage.setItem("token", "junk");
+      navigation.navigate("Login");
+    } catch (error) {
+      setError("Login failed. Please check your credentials.");
+      setVisible(true);
+      console.log(error.message);
+    }
   };
 
   return (
@@ -73,6 +93,11 @@ export default function Profile({navigation}) {
           Logout
         </Button>
       </View>
+      <ErrorMessage
+        visible={visible}
+        hideDialog={() => setVisible(false)}
+        message={error}
+      />
     </View>
   );
 }

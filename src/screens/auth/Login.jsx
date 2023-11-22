@@ -52,7 +52,7 @@ export default function Login({}) {
       const responseData = await loginAPI(data); // Call the loginAPI function
       dispatch(setUser(responseData.user));
       await AsyncStorage.setItem("token", responseData.token);
-
+      data = {}
       navigation.navigate("Tab");
     } catch (error) {
       setError("Login failed. Please check your credentials.");

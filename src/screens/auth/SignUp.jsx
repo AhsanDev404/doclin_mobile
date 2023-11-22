@@ -1,26 +1,46 @@
-import React, { useState } from "react";
-import { View, Image, StyleSheet, ScrollView } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
-import { useForm } from "react-hook-form";
+import React, { useState } from 'react';
+import { View, Image, StyleSheet, ScrollView } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
+import { useForm, Controller } from 'react-hook-form'; // Added Controller import
 
-import { login } from "../../utils/assets";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { signupSchema } from "../../utils/yupSchema";
-import { validateFormData } from "../../utils/formValidation";
+import { login } from '../../utils/assets';
+import { signupSchema } from '../../utils/yupSchema';
+import { validateFormData } from '../../utils/formValidation';
+import { signupAPI } from '../../services/auth';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import ErrorMessage from '../../components/ErrorMessage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUser } from '../../redux/slices/authSlice';
 
-
-
-export default function SignUp({ navigation }) {
-  const { control, handleSubmit } = useForm();
+export default function SignUp() {
+  const { control, handleSubmit, formState: { errors } } = useForm(); // Included formState to access errors
   const [validationErrors, setValidationErrors] = useState({});
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+  const [visible, setVisible] = useState(false);
 
   const handleValidation = async (data) => {
+
     await validateFormData(data, signupSchema, setValidationErrors, onSubmit);
   };
 
-  const onSubmit = (data) => {
-    // Handle form submission
-    console.log(data); // Access validated form data here
+  const onSubmit = async (data) => {
+    try {
+      const responseData = await signupAPI(data); // Call the signupAPI function
+      dispatch(setUser(responseData.user));
+      await AsyncStorage.setItem('token', responseData.token);
+      data = {}
+      navigation.navigate('Tab');
+    } catch (error) {
+      setError('Signup failed. Please check your details.');
+      setVisible(true);
+      console.log(error.message)
+      
+    }
+
+  
   };
 
   return (
@@ -28,45 +48,76 @@ export default function SignUp({ navigation }) {
       <View style={styles.imageContainer}>
         <Image source={login} style={styles.image} />
         <Text variant="displaySmall">Create an Account</Text>
-        <TextInput
-          label="Full Name"
+        <Controller
           control={control}
-          name="fullName"
-          style={styles.input}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Full Name"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              style={styles.input}
+            />
+          )}
+          name="name"
+          defaultValue={""}
         />
-        {validationErrors.fullName && <Text>{validationErrors.fullName}</Text>}
-        <TextInput
-          label="Email"
+        {errors.name && <Text>{errors.name.message}</Text>}
+
+        <Controller
           control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              style={styles.input}
+            />
+          )}
           name="email"
-          style={styles.input}
+          defaultValue={""}
         />
-        {validationErrors.email && <Text>{validationErrors.email}</Text>}
-        <TextInput
-          label="Password"
+        {errors.email && <Text>{errors.email.message} </Text>}
+
+        <Controller
           control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Password"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              style={styles.input}
+              secureTextEntry
+            />
+          )}
           name="password"
-          secureTextEntry
-          right={<TextInput.Icon icon="eye" />}
-          style={styles.input}
+         defaultValue={""}
         />
-        {validationErrors.password && <Text>{validationErrors.password}</Text>}
-        <TextInput
-          label="Confirm Password"
+        {errors.password && <Text>{errors.password.message} </Text>}
+
+        <Controller
           control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Confirm Password"
+              onBlur={onBlur}
+              onChangeText={(value) => onChange(value)}
+              value={value}
+              style={styles.input}
+              secureTextEntry
+            />
+          )}
           name="confirmPassword"
-          right={<TextInput.Icon icon="eye" />}
-          secureTextEntry
-          style={styles.input}
+          defaultValue={""}
         />
-        {validationErrors.confirmPassword && <Text>{validationErrors.confirmPassword}</Text>}
+        {errors.confirmPassword && <Text>{errors.confirmPassword.message} </Text>}
+
         <Button
           style={styles.button}
           contentStyle={styles.buttonContent}
           mode="contained"
-          icon={({ color, size }) => (
-            <Icon name="arrow-right" size={size} color={color} />
-          )}
           onPress={handleSubmit(handleValidation)}
         >
           Register Now
@@ -74,15 +125,20 @@ export default function SignUp({ navigation }) {
       </View>
       <View style={styles.loginContainer}>
         <Text>
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Text
             style={styles.navigationButton}
-            onPress={() => navigation.navigate("Login")}
+            onPress={() => navigation.navigate('Login')}
           >
             Login
           </Text>
         </Text>
       </View>
+      <ErrorMessage
+        visible={visible}
+        hideDialog={() => setVisible(false)}
+        message={error}
+      />
     </ScrollView>
   );
 }
@@ -93,37 +149,37 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginTop: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     gap: 20,
-    width: "100%",
+    width: '100%',
   },
   image: {
     width: 200,
     height: 200,
   },
   input: {
-    width: "90%",
+    width: '90%',
   },
   button: {
-    backgroundColor: "black",
+    backgroundColor: 'black',
     borderRadius: 10,
-    width: "90%",
+    width: '90%',
     marginTop: 20,
   },
   buttonContent: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   loginContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 20,
   },
   navigationButton: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 5,
   },
 });
