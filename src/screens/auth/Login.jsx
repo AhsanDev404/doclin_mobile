@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, StyleSheet, ScrollView } from "react-native";
 import { Button, Text, TextInput } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -8,38 +8,58 @@ import { loginSchema } from "../../utils/yupSchema";
 import { validateFormData } from "../../utils/formValidation";
 import { login } from "../../utils/assets";
 import axios from "axios";
-import { loginAPI } from "../../services/auth";
+import { setUser } from "../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { getUserProfile, loginAPI } from "../../services/auth";
+import ErrorMessage from "../../components/ErrorMessage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-export default function Login({ navigation }) {
+export default function Login({}) {
   const { control, handleSubmit } = useForm();
   const [validationErrors, setValidationErrors] = useState({});
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [error, setError] = useState(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token"); // Get token from AsyncStorage
+        if (token) {
+          const responseData = await getUserProfile(token);
+          dispatch(setUser(responseData.user));
+          navigation.navigate("Tab");
+        } else {
+          // Handle case where token is not available (e.g., user not authenticated)
+        }
+      } catch (error) {
+       
+      }
+    };
 
-   const handleValidation = async (data) => {
+    fetchUserProfile();
+  }, [dispatch]); // Dependency array: re-run when 'dispatch' changes
+
+  const handleValidation = async (data) => {
     try {
       await validateFormData(data, loginSchema, setValidationErrors, onSubmit);
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const onSubmit = async (data) => {
     try {
       const responseData = await loginAPI(data); // Call the loginAPI function
-      console.log(responseData);
-      // Handle the response as needed (e.g., set state, redirect, etc.)
+      dispatch(setUser(responseData.user));
+      await AsyncStorage.setItem("token", responseData.token);
+
+      navigation.navigate("Tab");
     } catch (error) {
-      console.error('Error:', error);
-      // Handle the error (e.g., show error message to the user)
+      setError("Login failed. Please check your credentials.");
+      setVisible(true);
+      console.log(error.message);
     }
   };
-
-
-  
-
-  
-  
 
   return (
     <ScrollView style={styles.container}>
@@ -71,7 +91,7 @@ export default function Login({ navigation }) {
               onChangeText={(value) => onChange(value)}
               value={value}
               secureTextEntry
-              right={<TextInput.Icon  icon="eye" />}
+              right={<TextInput.Icon icon="eye" />}
               style={styles.input}
             />
           )}
@@ -96,12 +116,17 @@ export default function Login({ navigation }) {
           Not a member?{" "}
           <Text
             style={styles.navigationButton}
-            onPress={() => navigation.push("SignUp")}
+            onPress={() => navigation.navigate("SignUp")}
           >
             Register Now
           </Text>
         </Text>
       </View>
+      <ErrorMessage
+        visible={visible}
+        hideDialog={() => setVisible(false)}
+        message={error}
+      />
     </ScrollView>
   );
 }
