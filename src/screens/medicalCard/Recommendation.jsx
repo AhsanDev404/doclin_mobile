@@ -5,6 +5,7 @@ import { doctorsData, feeling } from "../../utils/constant";
 import DoctorCard from "../../components/DoctorCard";
 import { IconButton, Text } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import ConsultantList from "../../components/ConsultantList";
 
 export default function Recommendation({}) {
   const navigation = useNavigation()
@@ -14,16 +15,7 @@ export default function Recommendation({}) {
       Recommendations For You
       </Text>
 
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <FlatList
-          scrollEnabled={false}
-          data={doctorsData}
-          renderItem={({ item }) => <DoctorCard item={item} />}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          contentContainerStyle={{ alignItems: "center" }} // Align items in the center
-        />
-      </View>
+      <ConsultantList />
       <View>
         <IconButton
           onPress={() => navigation.navigate("Home")}

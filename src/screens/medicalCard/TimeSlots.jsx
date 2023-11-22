@@ -64,7 +64,7 @@ const TimeSlots = ({ navigation }) => {
                   backgroundColor: selectedSlot === slot._id ? 'blue' : 'transparent',
                 }}
               >
-                <Subheading style={{ color: selectedSlot?._id === slot._id ? 'white' : 'black' }}>
+                <Subheading style={{ color: selectedSlot === slot._id ? 'white' : 'black' }}>
                   {`${slot.startTime} - ${slot.endTime}`}
                 </Subheading>
               </Button>

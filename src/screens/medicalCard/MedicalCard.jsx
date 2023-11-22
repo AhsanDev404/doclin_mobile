@@ -84,6 +84,9 @@ export default function MedicalCard({navigation}) {
       <Button onPress={()=>navigation.push('Recommendation')} mode="contained" style={{backgroundColor:'black' , margin:10}}>
       Scheduled Sessions
       </Button>
+      <Button onPress={()=>navigation.push('Appointment')} mode="contained" style={{backgroundColor:'black' , margin:10}}>
+       Appointments
+      </Button>
 
     </ScrollView>
   );
