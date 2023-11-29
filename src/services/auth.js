@@ -23,7 +23,7 @@ export const loginAPI = async (data) => {
    
     return responseData; // Return parsed response data
   } catch (error) {
-    throw new Error('Error occurred while fetching data:', error);
+    throw new Error('Error occurred while fetching data:', error.message);
   }
 };
 

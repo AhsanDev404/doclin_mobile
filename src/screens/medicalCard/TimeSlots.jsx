@@ -53,7 +53,7 @@ const TimeSlots = ({ navigation }) => {
       {slots.map((slotGroup) => (
         <Card key={slotGroup._id} style={{ marginVertical: 10, padding: 15 }}>
           <Title>{slotGroup.timeSlots[0].day}</Title>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <View style={{  }}>
             {slotGroup.timeSlots[0].slots.map((slot) => (
               <Button
                 key={slot._id}
@@ -61,7 +61,7 @@ const TimeSlots = ({ navigation }) => {
                 onPress={() => setSelectedSlot(slot._id)}
                 style={{
                   marginVertical: 5,
-                  backgroundColor: selectedSlot === slot._id ? 'blue' : 'transparent',
+                  backgroundColor: selectedSlot === slot._id ? 'gray' : 'transparent',
                 }}
               >
                 <Subheading style={{ color: selectedSlot === slot._id ? 'white' : 'black' }}>
