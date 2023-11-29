@@ -2,7 +2,7 @@
 
 # dependencies
 node_modules/
-.env/
+*.env
 
 # Expo
 .expo/
@@ -29,8 +29,7 @@ yarn-error.*
 .DS_Store
 *.pem
 
-# local env files
-.env*.local
+
 
 # typescript
 *.tsbuildinfo
