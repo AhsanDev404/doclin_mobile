@@ -5,8 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the approp
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
-  const CHAT_API_KEY = "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";
-
+  
   const handelSend = async (newMessage = []) => {
     try {
       const userMessage = newMessage[0];
@@ -73,7 +72,7 @@ export default function ChatBot() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${CHAT_API_KEY}`
+          'Authorization': `Bearer ${process.env.CHAT_API_KEY}`
         },
         body: JSON.stringify({
           prompt: messageText,
