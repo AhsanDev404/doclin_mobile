@@ -1,111 +1,71 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { GiftedChat, Bubble, InputToolbar, Send } from "react-native-gifted-chat";
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the appropriate icon package
+import {
+  GiftedChat,
+  Bubble,
+  InputToolbar,
+  Send,
+} from "react-native-gifted-chat";
+import Icon from "react-native-vector-icons/MaterialIcons"; // Import the appropriate icon package
+import axios from "axios";
+import bot from "../../assets/bot.png";
 
 export default function ChatBot() {
   const [messages, setMessages] = useState([]);
-  
+
   const handelSend = async (newMessage = []) => {
-    try {
-      const userMessage = newMessage[0];
-      setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, userMessage)
-      );
-      const messageText = userMessage.text.toLowerCase();
-      const keywords = [
-        'doctor', 
-        'therapist', 
-        'counseling', 
-        'psychologist', 
-        'psychiatry', 
-        'mental health', 
-        'therapy', 
-        'depression', 
-        'anxiety', 
-        'stress', 
-        'bipolar disorder', 
-        'schizophrenia', 
-        'PTSD', 
-        'OCD', 
-        'ADHD', 
-        'addiction', 
-        'eating disorders', 
-        'trauma', 
-        'self-esteem', 
-        'relationship counseling', 
-        'mindfulness',
-        'phobia',
-        'panic disorder',
-        'social anxiety',
-        'personality disorders',
-        'child psychology',
-        'family therapy',
-        'anger management',
-        'grief counseling',
-        'substance abuse',
-        'behavioral therapy',
-        'cognitive therapy',
-        'group therapy',
-        'teletherapy',
-        'mental health assessment',
-        'medication management',
-        'rehabilitation services'
-    ];
-      if (!keywords.some((keyword) => messageText.includes(keyword))) {
-        const botResponse = {
+    const userMessage = newMessage[0];
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, userMessage)
+    );
+    const messageText = userMessage.text.toLowerCase();
+
+    axios
+      .post(
+        "https://api.openai.com/v1/engines/davinci-codex/completions",
+        {
+          prompt: messageText,
+          max_tokens: 60,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.EXPO_PUBLIC_CHAT_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        const botMessage = {
           _id: new Date().getTime() + 1,
-          text: "Hey there! Looking for a little mental recharge? I’m here to chat!",
+          text: response.data.choices[0].text.trim(),
           createdAt: new Date(),
           user: {
             _id: 2,
             name: "Mental Bot",
+            avatar:
+              "https://w7.pngwing.com/pngs/1001/63/png-transparent-internet-bot-computer-icons-chatbot-sticker-electronics-face-careobot-thumbnail.png",
           },
         };
         setMessages((previousMessages) =>
-          GiftedChat.append(previousMessages, botResponse)
+          GiftedChat.append(previousMessages, botMessage)
         );
-        return;
-      }
-      
-      const response = await fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.CHAT_API_KEY}`
-        },
-        body: JSON.stringify({
-          prompt: messageText,
-          max_tokens: 1200,
-          temperature: 0.2,
-          n: 1,
-        }),
+      })
+      .catch((error) => {
+        const botMessage = {
+          _id: new Date().getTime() + 1,
+          text: "Oops! It seems like an error has occurred. Please bear with us as we are working to resolve it. Your patience is highly appreciated, and we will  provide an update as soon as possible. Thank you for your understanding!",
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: "Mental Bot",
+            avatar:
+              "https://w7.pngwing.com/pngs/1001/63/png-transparent-internet-bot-computer-icons-chatbot-sticker-electronics-face-careobot-thumbnail.png",
+          },
+        };
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, botMessage)
+        );
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok.');
-      }
-
-      const data = await response.json();
-      const message = data.choices[0].text.trim();
-
-      const botMessage = {
-        _id: new Date().getTime() + 1,
-        text: message,
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "Mental Bot",
-        },
-      };
-
-      setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, botMessage)
-      );
-    } catch (error) {
-      console.error('Error occurred:', error.message);
-      // Handle error or display error message
-    }
   };
 
   useEffect(() => {
@@ -117,6 +77,8 @@ export default function ChatBot() {
         user: {
           _id: 2,
           name: "Mental Bot",
+          avatar:
+            "https://w7.pngwing.com/pngs/1001/63/png-transparent-internet-bot-computer-icons-chatbot-sticker-electronics-face-careobot-thumbnail.png",
         },
       },
     ]);
@@ -127,18 +89,18 @@ export default function ChatBot() {
       {...props}
       wrapperStyle={{
         right: {
-          backgroundColor: 'black',
+          backgroundColor: "black",
         },
         left: {
-          backgroundColor: 'white',
+          backgroundColor: "white",
         },
       }}
       textStyle={{
         right: {
-          color: 'white',
+          color: "white",
         },
         left: {
-          color: 'black',
+          color: "black",
         },
       }}
     />
@@ -146,12 +108,9 @@ export default function ChatBot() {
 
   const renderInputToolbar = (props) => (
     <InputToolbar
-
       {...props}
-      
       containerStyle={{
-        backgroundColor: '',
-        
+        backgroundColor: "",
       }}
     />
   );
@@ -159,7 +118,7 @@ export default function ChatBot() {
   const renderSend = (props) => (
     <Send {...props}>
       <View style={{ marginRight: 10, marginBottom: 5 }}>
-        <Icon name="send" size={25} color="black" /> 
+        <Icon name="send" size={25} color="black" />
       </View>
     </Send>
   );
@@ -177,3 +136,73 @@ export default function ChatBot() {
     />
   );
 }
+
+// import { View, Text } from 'react-native'
+// import React, { useState } from 'react'
+// import {GiftedChat} from 'react-native-gifted-chat'
+// import axios from 'axios'
+
+// export default function ChatBot() {
+//   const [messages, setMessages] = useState([])
+// const YOUR_CHATGPT_API_KEY = 'sk-FmE7MYXs52g0U5nuSCZgT3BlbkFJc5MdYWW8qPIq1R8z4Q4';
+// const handleSend = async (newMessages = []) => {
+//  try {
+
+//     // Get the user's message
+//     const userMessage = newMessages [0];
+//     setMessages(previousMessages => GiftedChat.append(previousMessages, userMessage));
+//     const messageText = userMessage.text.toLowerCase();
+// const keywords = ['recipe', 'food', 'diet', 'fruit'];
+// if (!keywords.some (keyword=> messageText.includes (keyword))){
+//   // if the message does not contain any food-related keywords, respond with a defi
+//   const botMessage = {
+//   _id: new Date().getTime()+ 1,
+//   text: "I'm your food bot, ask me anything related to food and recipe",
+//   createdAt: new Date(),
+//   user: {
+//   _id: 2,
+//   name: 'Food Bot'
+//   }
+// }
+//   setMessages (previousMessages => GiftedChat.append(previousMessages, botMessage)).
+//   return;
+//   }
+//  const response =  await axios.post('https://api.openai.com/v1/engines/text-davinci-003/completions',{
+//   prompt: `Get me a recipe for ${messageText}`,
+//   max_tokens: 1200,
+//   temperature: 0.2,
+//   n:1,
+// }, {
+//   headers:{ 
+//   'Content-Type': 'application/json',
+//   'Authorization': `Bearer ${YOUR_CHATGPT_API_KEY}`
+//   }
+
+//  })
+
+//  const recipe = response.data.choices [0].text.trim();
+// const botMessage = {
+// _id: new Date().getTime() + 1,
+// text: recipe,
+// createdAt: new Date(),
+// user: {
+// _id: 2,
+// name: 'Food Bot'
+// }}
+// setMessages (previousMessages => GiftedChat.append(previousMessages, botMessage))
+  
+//  } catch (error) {
+//   console.log(error)
+//  }
+// }
+
+//   return (
+//     <GiftedChat
+//       messages={messages}
+//       onSend={(newMessages) => handleSend(newMessages)}
+//       user={{
+//         _id: 1,
+//       }}
+//     />
+//   )
+// }
