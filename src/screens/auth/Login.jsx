@@ -16,12 +16,13 @@ import ErrorMessage from "../../components/ErrorMessage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({}) {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit , formState} = useForm();
   const [validationErrors, setValidationErrors] = useState({});
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
+  const { isSubmitted, isSubmitting } = formState;
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -107,8 +108,9 @@ export default function Login({}) {
             <Icon name="arrow-right" size={size} color={color} />
           )}
           onPress={handleSubmit(handleValidation)}
+          disabled={isSubmitting}
         >
-          Sign In
+          {isSubmitting ? "Signing In..." : "Sign In"}
         </Button>
       </View>
       <View style={styles.registerContainer}>

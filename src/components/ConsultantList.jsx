@@ -33,7 +33,7 @@ export default function ConsultantList({ numberOfDoctorsToShow }) {
     const doctorsToShow = consultants.length ? consultants.slice(0, numberOfDoctorsToShow) : [];
   
     return (
-      <View style={{ flexDirection :"row" , flexWrap:"wrap" , gap:2 }}>
+      <View style={{ flexDirection :"row" , flexWrap:"wrap" , gap:1 }}>
         {doctorsToShow.map((item , index)=><DoctorCard key={index} item={item} />)}
       </View>
     );

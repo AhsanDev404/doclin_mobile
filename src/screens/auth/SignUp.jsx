@@ -20,6 +20,7 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [visible, setVisible] = useState(false);
+  const { isSubmitted, isSubmitting } = formState;
 
   const handleValidation = async (data) => {
 
@@ -119,8 +120,9 @@ export default function SignUp() {
           contentStyle={styles.buttonContent}
           mode="contained"
           onPress={handleSubmit(handleValidation)}
+          disabled={isSubmitting}
         >
-          Register Now
+          {isSubmitting ? "Register..." : "Register Now"}
         </Button>
       </View>
       <View style={styles.loginContainer}>

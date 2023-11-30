@@ -14,7 +14,7 @@ export default function DoctorCard({item}) {
       });
       
 
-    }} style={{  marginTop:50 ,marginLeft:5, width:180 }}>
+    }} style={{  marginTop:50 ,marginLeft:5, width:150 }}>
       <Image
         style={{
           width: 100,
