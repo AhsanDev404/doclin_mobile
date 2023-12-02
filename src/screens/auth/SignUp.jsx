@@ -14,7 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setUser } from '../../redux/slices/authSlice';
 
 export default function SignUp() {
-  const { control, handleSubmit, formState: { errors } } = useForm(); // Included formState to access errors
+  const { control, handleSubmit, formState } = useForm(); // Included formState to access errors
   const [validationErrors, setValidationErrors] = useState({});
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export default function SignUp() {
           name="name"
           defaultValue={""}
         />
-        {errors.name && <Text>{errors.name.message}</Text>}
+        {/* {errors.name && <Text>{errors.name.message}</Text>} */}
 
         <Controller
           control={control}
@@ -79,7 +79,7 @@ export default function SignUp() {
           name="email"
           defaultValue={""}
         />
-        {errors.email && <Text>{errors.email.message} </Text>}
+        {/* {errors.email && <Text>{errors.email.message} </Text>} */}
 
         <Controller
           control={control}
@@ -96,7 +96,7 @@ export default function SignUp() {
           name="password"
          defaultValue={""}
         />
-        {errors.password && <Text>{errors.password.message} </Text>}
+        {/* {errors.password && <Text>{errors.password.message} </Text>} */}
 
         <Controller
           control={control}
@@ -113,7 +113,7 @@ export default function SignUp() {
           name="confirmPassword"
           defaultValue={""}
         />
-        {errors.confirmPassword && <Text>{errors.confirmPassword.message} </Text>}
+        {/* {errors.confirmPassword && <Text>{errors.confirmPassword.message} </Text>} */}
 
         <Button
           style={styles.button}
