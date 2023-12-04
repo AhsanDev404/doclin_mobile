@@ -22,7 +22,7 @@ export default function ChatBot() {
 
     axios
       .post(
-        "https://api.openai.com/v1/engines/davinci-codex/completions",
+        "https://api.openai.com/v1/engines/text-davinci-003/completions",
         {
           prompt: messageText,
           max_tokens: 60,
